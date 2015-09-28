@@ -90,3 +90,16 @@ class FamousPirate < ActiveRecord::Base
   has_many :famous_ships
   validates_presence_of :catchphrase, on: :conference
 end
+
+class PirateWithCallback < ActiveRecord::Base
+  self.table_name = 'pirates'
+  CALLBACK_TEXT = 'catchphrase_after_save_value'
+
+  after_save :set_value_after_save
+
+  private
+
+    def set_value_after_save
+      self.catchphrase = CALLBACK_TEXT
+    end
+end

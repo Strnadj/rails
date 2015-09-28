@@ -34,6 +34,15 @@ class DirtyTest < ActiveRecord::TestCase
     Person.create :first_name => 'foo'
   end
 
+  def test_catchphrase_changed_after_save
+    p = PirateWithCallback.new :catchphrase => 'foo'
+    assert_nil p.catchphrase_was
+    assert_equal p.catchphrase, 'foo'
+    p.save!
+    assert_equal PirateWithCallback::CALLBACK_TEXT, p.catchphrase
+    assert_equal 'foo', p.catchphrase_was
+  end
+
   def test_attribute_changes
     # New record - no changes.
     pirate = Pirate.new
